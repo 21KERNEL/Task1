@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Result</title>
+</head>
+<body>
+    <h1>Last Command</h1>
+    <p id="command"></p>
+
+    <script>
+        // Get the command from localStorage and display it
+        document.getElementById('command').textContent = localStorage.getItem('lastCommand') || 'No command received';
+    </script>
+</body>
+</html>

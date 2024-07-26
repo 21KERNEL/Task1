@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Control</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff; /* AliceBlue */
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+        #controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+        button {
+            padding: 20px;
+            font-size: 18px;
+            border: 2px solid #2c3e50; /* Dark Blue */
+            border-radius: 50%;
+            background-color: #3498db; /* Blue */
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9; /* Dark Blue */
+            transform: scale(1.1);
+        }
+        .forward {
+            grid-column: 2;
+        }
+        .left {
+            grid-column: 1;
+        }
+        .stop {
+            grid-column: 2;
+        }
+        .right {
+            grid-column: 3;
+        }
+        .backward {
+            grid-column: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button class="forward" onclick="sendCommand('forward')">↑</button>
+        <button class="left" onclick="sendCommand('left')">←</button>
+        <button class="stop" onclick="sendCommand('stop')">⏹</button>
+        <button class="right" onclick="sendCommand('right')">→</button>
+        <button class="backward" onclick="sendCommand('backward')">↓</button>
+    </div>
+
+    <script>
+     async function sendCommand(command) {
+    try {
+        const response = await fetch('control.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ command: command })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const data = await response.json();
+        console.log('Success:', data);
+
+        // Store the command in localStorage
+        localStorage.setItem('lastCommand', command);
+
+        // Redirect to the result page
+        window.location.href = 'result.html';
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
